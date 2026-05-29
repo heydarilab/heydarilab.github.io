@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  items: CollectionEntry<"news">[];
+  /** When set, only the first N items are shown. */
+  limit?: number;
+}
+const { items, limit } = Astro.props;
+const shown = limit ? items.slice(0, limit) : items;
+
+const fmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<ul class="divide-y hairline">
+  {
+    shown.map((item) => (
+      <li class="py-5 sm:py-6 flex flex-col sm:flex-row sm:gap-8">
+        <time
+          datetime={item.data.date.toISOString()}
+          class="eyebrow shrink-0 sm:w-28 mb-1 sm:mb-0 sm:pt-1"
+        >
+          {fmt.format(item.data.date)}
+        </time>
+        <div class="flex-1">
+          <h3 class="h-display text-lg sm:text-xl leading-snug mb-1">
+            {item.data.link ? (
+              <a
+                href={item.data.link}
+                class="hover:underline decoration-ember decoration-2 underline-offset-4"
+              >
+                {item.data.title}
+              </a>
+            ) : (
+              item.data.title
+            )}
+          </h3>
+          <p class="text-ink-soft text-sm leading-relaxed">
+            {item.data.summary}
+          </p>
+        </div>
+      </li>
+    ))
+  }
+</ul>

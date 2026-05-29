@@ -1,0 +1,38 @@
+---
+/**
+ * SectionHeader — eyebrow + headline + optional kicker pattern,
+ * used to introduce each major section of the site.
+ */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  kicker?: string;
+  align?: "left" | "center";
+}
+const {
+  eyebrow,
+  title,
+  kicker,
+  align = "left",
+} = Astro.props;
+---
+
+<header
+  data-reveal
+  class:list={[
+    "mb-8 sm:mb-12 max-w-3xl",
+    align === "center" && "mx-auto text-center",
+  ]}
+>
+  {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+  <h2 class="h-display text-3xl sm:text-4xl lg:text-5xl leading-[1.05]">
+    {title}
+  </h2>
+  {
+    kicker && (
+      <p class="mt-4 sm:mt-5 text-ink-soft text-base sm:text-lg leading-relaxed">
+        {kicker}
+      </p>
+    )
+  }
+</header>

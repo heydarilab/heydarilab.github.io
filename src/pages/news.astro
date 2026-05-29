@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsList from "../components/NewsList.astro";
+---
+
+<BaseLayout
+  title="News"
+  description="News, grants, press, and publications from the MAGICS Lab."
+>
+  <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
+    <p class="eyebrow mb-3">News</p>
+    <h1 class="h-display text-4xl sm:text-6xl leading-[1.05] max-w-3xl">
+      News &amp; updates.
+    </h1>
+    <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
+      Grants, press, talks, and milestone publications from the lab.
+    </p>
+  </section>
+
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-12 sm:mt-16 pb-8">
+    {
+      await (async () => {
+        const items = (await getCollection("news", ({ data }) => !data.draft))
+          .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+        return items.length > 0 ? (
+          <div data-reveal>
+            <NewsList items={items} />
+          </div>
+        ) : (
+          <p class="text-ink-muted">No news yet.</p>
+        );
+      })()
+    }
+    <p class="mt-8 text-sm text-ink-muted">
+      More news and full publications will be added later.
+    </p>
+  </section>
+</BaseLayout>

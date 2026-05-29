@@ -1,0 +1,98 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PaperSchematic from "../../components/PaperSchematic.astro";
+
+export async function getStaticPaths() {
+  const papers = await getCollection("highlights", ({ data }) => !data.draft);
+  return papers.map((paper) => ({
+    params: { slug: paper.slug },
+    props: { paper },
+  }));
+}
+
+const { paper } = Astro.props;
+const { Content } = await render(paper);
+const { data } = paper;
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.hook}
+>
+  <article class="max-w-page mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-8">
+    <nav class="mb-8 text-sm">
+      <a
+        href="/highlights"
+        class="text-ink-muted hover:text-ink inline-flex items-center gap-1"
+      >
+        <span aria-hidden="true">←</span> All highlights
+      </a>
+    </nav>
+
+    <header class="max-w-3xl">
+      <p class="eyebrow mb-3">{data.venue} · {data.year}</p>
+      <h1 class="h-display text-3xl sm:text-5xl leading-[1.06] mb-4">
+        {data.title}
+      </h1>
+      <p class="text-ink-soft text-base sm:text-lg leading-relaxed mb-5">
+        {data.hook}
+      </p>
+      <p class="text-sm text-ink-muted">{data.authors.join(", ")}</p>
+      {
+        data.links.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-3">
+            {data.links.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ring-1 ring-ink/15 hover:ring-ink/40 hover:bg-cream-card transition-colors"
+                >
+                  {l.label}
+                  <span aria-hidden="true" class="text-ink-muted">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <figure
+      class="mt-10 sm:mt-12 rounded-xl overflow-hidden ring-1 ring-rule/80 bg-cream-card"
+      data-reveal
+    >
+      <div class="aspect-[16/9]">
+        {
+          data.image ? (
+            <Image
+              src={data.image}
+              alt={data.imageAlt}
+              widths={[640, 960, 1280, 1600]}
+              sizes="(min-width: 1024px) 60vw, 90vw"
+              class="w-full h-full object-cover"
+            />
+          ) : data.schematicId ? (
+            <PaperSchematic id={data.schematicId} title={data.title} />
+          ) : null
+        }
+      </div>
+      {
+        data.imageAlt && (
+          <figcaption class="text-xs text-ink-muted px-5 py-3 border-t hairline">
+            {data.imageAlt}
+          </figcaption>
+        )
+      }
+    </figure>
+
+    <section
+      class="mt-12 sm:mt-16 max-w-prose prose-editorial"
+      data-reveal
+      style="--reveal-delay:80ms"
+    >
+      <Content />
+    </section>
+  </article>
+</BaseLayout>

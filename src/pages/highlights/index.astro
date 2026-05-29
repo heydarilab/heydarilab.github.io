@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PaperCard from "../../components/PaperCard.astro";
+
+const papers = (await getCollection("highlights", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Highlights"
+  description="Highlighted papers from the MAGICS Lab — short visual cards with one-line takeaways linking to per-paper pages."
+>
+  <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
+    <p class="eyebrow mb-3">Highlights</p>
+    <h1 class="h-display text-4xl sm:text-6xl leading-[1.05] max-w-3xl">
+      Key papers.
+    </h1>
+    <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
+      A small curated set of the lab's papers, each with a one-line hook
+      and a per-paper page summarizing the idea and linking out.
+    </p>
+  </section>
+
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-12 sm:mt-16 pb-8">
+    {
+      papers.length === 0 ? (
+        <p class="text-ink-muted">No highlighted papers yet.</p>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {papers.map((p, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 60}ms`} class="h-full">
+              <PaperCard
+                href={`/highlights/${p.slug}`}
+                title={p.data.title}
+                hook={p.data.hook}
+                venue={p.data.venue}
+                year={p.data.year}
+                authors={p.data.authors}
+                image={p.data.image}
+                imageAlt={p.data.imageAlt}
+                schematicId={p.data.schematicId}
+              />
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

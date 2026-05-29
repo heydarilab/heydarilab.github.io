@@ -1,0 +1,52 @@
+# -----------------------------------------------------------------
+#  Deploys the MAGICS Lab Astro site to GitHub Pages.
+#
+#  After the first successful push, go to:
+#    Settings → Pages → Build and deployment → Source = "GitHub Actions"
+#  (one-time click). After that, every push to `main` rebuilds and
+#  redeploys the site automatically.
+# -----------------------------------------------------------------
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Allows manual re-runs from the Actions tab.
+  workflow_dispatch:
+
+# Permissions required by the official Pages deploy action.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one Pages deployment at a time; cancel in-progress runs that
+# would be overtaken by a newer one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install, build, upload (Astro action)
+        uses: withastro/action@v3
+        # Defaults: node 20, npm install (or ci, or pnpm, depending on lockfile),
+        # `npm run build`, then uploads `dist/` as the pages artifact.
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

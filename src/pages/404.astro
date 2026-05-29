@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found">
+  <section
+    class="max-w-page mx-auto px-5 sm:px-8 pt-24 pb-24 text-center"
+  >
+    <p class="eyebrow mb-3">404</p>
+    <h1 class="h-display text-5xl sm:text-7xl leading-[1.05]">
+      We couldn't find that page.
+    </h1>
+    <p class="mt-6 text-ink-soft text-lg max-w-prose mx-auto">
+      The link may be old, or the page may have moved. Try the homepage or
+      head over to the highlights.
+    </p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 bg-ink text-cream px-5 py-3 rounded-full text-sm font-medium hover:bg-ember-dark transition-colors"
+        >Back to home</a
+      >
+      <a
+        href="/highlights"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium text-ink ring-1 ring-ink/15 hover:ring-ink/40 transition-colors"
+      >
+        Browse highlights
+      </a>
+    </div>
+  </section>
+</BaseLayout>

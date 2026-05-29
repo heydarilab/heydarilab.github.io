@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import ResearchAreas from "../components/ResearchAreas.astro";
+import ApproachStrip from "../components/ApproachStrip.astro";
+---
+
+<BaseLayout
+  title="Research"
+  description="The MAGICS Lab works at the intersection of multi-agent systems, network science, and the design of sociotechnical institutions."
+>
+  <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
+    <p class="eyebrow mb-3">Research</p>
+    <h1 class="h-display text-4xl sm:text-6xl leading-[1.05] max-w-3xl">
+      We design and govern <span class="text-teal">complex</span>,{" "}
+      <span class="text-ember">multi-agent</span> sociotechnical systems.
+    </h1>
+    <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
+      Our research lives at the meeting point of three perspectives —
+      agents, structure, and dynamics — and follows a single throughline:
+      to design well, you have to understand and model first, and then
+      govern the result.
+    </p>
+  </section>
+
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-20">
+    <SectionHeader
+      eyebrow="Three research areas"
+      title="Agents · Architecture · Dynamics."
+      kicker="Each area has its own methods, but the lab's projects almost always sit on at least two of them."
+    />
+    <ResearchAreas />
+  </section>
+
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 sm:mt-32">
+    <SectionHeader
+      eyebrow="Four-stage approach"
+      title="From understanding to governance."
+      kicker="A single project usually walks the same route — understand the system, build a model, design an intervention, then think hard about how to govern it."
+    />
+    <ApproachStrip />
+  </section>
+
+  <section
+    class="max-w-page mx-auto px-5 sm:px-8 mt-24 sm:mt-32 pb-8 grid lg:grid-cols-12 gap-10"
+  >
+    <div class="lg:col-span-5" data-reveal>
+      <p class="eyebrow mb-3">Methods</p>
+      <h2 class="h-display text-3xl sm:text-4xl leading-tight">
+        Tools we use.
+      </h2>
+    </div>
+    <div
+      class="lg:col-span-7 text-ink-soft text-lg leading-relaxed space-y-4"
+      data-reveal
+      style="--reveal-delay:100ms"
+    >
+      <p>
+        Multi-agent reinforcement learning, graph representation learning,
+        agent-based modeling, network formation games, NK-style fitness
+        landscapes, and behavioral experiments — chosen by the question, not
+        by fashion.
+      </p>
+      <p>
+        We also work hard on the explainable side: small, interpretable
+        models, causal-inference workflows, and structured comparisons to
+        keep big simulation pipelines honest.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

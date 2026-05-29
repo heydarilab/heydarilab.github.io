@@ -1,0 +1,232 @@
+---
+/**
+ * NetworkHero — drifting multi-agent network behind the homepage headline.
+ *
+ * Implementation notes:
+ *   - Pure <canvas>. ~70 nodes that drift with low-amplitude noise; edges
+ *     are drawn for any pair within a connect-radius, so the topology
+ *     constantly rewires itself like a small evolving network.
+ *   - Palette is read once from CSS custom properties so it stays in sync
+ *     with the Tailwind theme.
+ *   - prefers-reduced-motion fully short-circuits to a static SVG fallback.
+ *   - The canvas pauses when off-screen (IntersectionObserver) and resumes
+ *     when scrolled back in, to avoid burning CPU on long pages.
+ */
+---
+
+<div class="relative isolate overflow-hidden" data-network-host>
+  <canvas
+    id="network-canvas"
+    aria-hidden="true"
+    class="absolute inset-0 w-full h-full motion-reduce:hidden"
+  ></canvas>
+
+  <!-- Static fallback for reduced motion -->
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 800 500"
+    preserveAspectRatio="xMidYMid slice"
+    class="absolute inset-0 w-full h-full hidden motion-reduce:block opacity-70"
+  >
+    <defs>
+      <radialGradient id="nh-glow" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#E07B3F" stop-opacity="0.18" />
+        <stop offset="100%" stop-color="#E07B3F" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <rect width="800" height="500" fill="url(#nh-glow)" />
+    {
+      [
+        [120, 110],
+        [260, 180],
+        [420, 90],
+        [560, 220],
+        [690, 130],
+        [180, 320],
+        [340, 380],
+        [520, 360],
+        [660, 410],
+        [200, 460],
+      ].map(([cx, cy], i) => (
+        <circle
+          cx={cx}
+          cy={cy}
+          r={i % 3 === 0 ? 5 : 3.5}
+          fill={
+            i % 4 === 0 ? "#E07B3F" : i % 4 === 1 ? "#3A8C8C" : i % 4 === 2 ? "#D4A02A" : "#1B2A3A"
+          }
+          opacity="0.85"
+        />
+      ))
+    }
+    <g stroke="#1B2A3A" stroke-opacity="0.18" stroke-width="1" fill="none">
+      <line x1="120" y1="110" x2="260" y2="180" />
+      <line x1="260" y1="180" x2="420" y2="90" />
+      <line x1="420" y1="90" x2="560" y2="220" />
+      <line x1="560" y1="220" x2="690" y2="130" />
+      <line x1="180" y1="320" x2="340" y2="380" />
+      <line x1="340" y1="380" x2="520" y2="360" />
+      <line x1="520" y1="360" x2="660" y2="410" />
+      <line x1="260" y1="180" x2="340" y2="380" />
+      <line x1="420" y1="90" x2="520" y2="360" />
+    </g>
+  </svg>
+
+  <!-- Soft gradient overlay so headline text stays legible -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/55 to-cream pointer-events-none"
+  >
+  </div>
+
+  <div class="relative">
+    <slot />
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const canvas = document.getElementById("network-canvas");
+    if (!canvas) return;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReduced) return;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = canvas.getContext("2d");
+    let width = 0;
+    let height = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // Lab palette — sampled from the overview figure.
+    const NODE_COLORS = ["#E07B3F", "#3A8C8C", "#D4A02A", "#1B2A3A"];
+    const EDGE_COLOR = "rgba(27, 42, 58, 0.18)";
+
+    // Tuning knobs
+    const NODE_COUNT = 64;
+    const CONNECT_DIST = 130; // px in CSS space
+    const DRIFT_SPEED = 0.18; // base velocity scale
+
+    /** @type {Array<{x:number,y:number,vx:number,vy:number,r:number,c:string}>} */
+    const nodes = [];
+
+    function rand(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    function seedNodes() {
+      nodes.length = 0;
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+          x: rand(0, width),
+          y: rand(0, height),
+          vx: rand(-DRIFT_SPEED, DRIFT_SPEED),
+          vy: rand(-DRIFT_SPEED, DRIFT_SPEED),
+          r: rand(1.4, 3.2),
+          c: NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)],
+        });
+      }
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (!nodes.length) seedNodes();
+    }
+
+    function step() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Update positions; gentle wrap at edges.
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < -10) n.x = width + 10;
+        if (n.x > width + 10) n.x = -10;
+        if (n.y < -10) n.y = height + 10;
+        if (n.y > height + 10) n.y = -10;
+      }
+
+      // Draw edges between near-neighbors. O(n^2) but n is tiny.
+      ctx.lineWidth = 1;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < CONNECT_DIST * CONNECT_DIST) {
+            const t = 1 - Math.sqrt(d2) / CONNECT_DIST;
+            ctx.strokeStyle =
+              EDGE_COLOR.replace(/[\d.]+\)$/, (m) =>
+                (parseFloat(m) * t).toFixed(3) + ")",
+              ) || EDGE_COLOR;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw nodes on top.
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        ctx.fillStyle = n.c;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    let rafId = 0;
+    let running = false;
+    function loop() {
+      step();
+      rafId = requestAnimationFrame(loop);
+    }
+    function start() {
+      if (running) return;
+      running = true;
+      loop();
+    }
+    function stop() {
+      running = false;
+      cancelAnimationFrame(rafId);
+    }
+
+    // Pause when the hero is off-screen.
+    const host = canvas.closest("[data-network-host]") || canvas;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) start();
+          else stop();
+        });
+      },
+      { threshold: 0 },
+    );
+    io.observe(host);
+
+    // Pause when the tab is hidden.
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    window.addEventListener("resize", () => {
+      resize();
+    });
+
+    resize();
+    start();
+  })();
+</script>

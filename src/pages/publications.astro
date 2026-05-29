@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+
+// ---------------------------------------------------------------
+// Placeholder publications list.
+// TODO — replace this hand-curated array with a BibTeX-driven build.
+// One sensible path:
+//   1. Drop a `publications.bib` file into the project root.
+//   2. Add a small build step using @citation-js/core or similar to
+//      transform .bib → JSON, then map the JSON into the same shape as
+//      `entries` below.
+// Until then, this page renders the entries you add by hand here.
+// ---------------------------------------------------------------
+type Entry = {
+  authors: string;
+  title: string;
+  venue: string;
+  year: number;
+  links?: { label: string; href: string }[];
+};
+
+const entries: Entry[] = [
+  {
+    authors:
+      "Heydari, B., Chattopadhyay, S., Padhee, S., & Karim, S.",
+    title:
+      "Core or Periphery: Examining Where to Allocate Heterogeneous Inventors and the Impact on Firms' Innovation",
+    venue: "Strategic Management Journal, 47(2): 331–363",
+    year: 2026,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/smj.70005",
+      },
+    ],
+  },
+  {
+    authors: "Chen, Q., & Heydari, B.",
+    title:
+      "Resource Governance in Networked Systems via Integrated Variational Autoencoders and Reinforcement Learning",
+    venue: "ASME Journal of Mechanical Design",
+    year: 2025,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://asmedigitalcollection.asme.org/mechanicaldesign/article/doi/10.1115/1.4070755/1229782",
+      },
+      { label: "arXiv", href: "https://arxiv.org/abs/2410.23393" },
+    ],
+  },
+  {
+    authors: "Chen, Q., & Heydari, B.",
+    title:
+      "Adaptive Network Intervention for Complex Systems: A Hierarchical Graph Reinforcement Learning Approach",
+    venue:
+      "ASME Journal of Computing and Information Science in Engineering, 25(6): 061006",
+    year: 2025,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://asmedigitalcollection.asme.org/computingengineering/article-abstract/25/6/061006/1215373",
+      },
+      { label: "arXiv", href: "https://arxiv.org/abs/2410.23396" },
+    ],
+  },
+  {
+    authors: "Lore, N., & Heydari, B.",
+    title:
+      "Strategic Behavior of Large Language Models and the Role of Game Structure versus Contextual Framing",
+    venue: "Nature Scientific Reports, 14: 18490",
+    year: 2024,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://www.nature.com/articles/s41598-024-69032-z",
+      },
+    ],
+  },
+  {
+    authors: "Maddah, N., & Heydari, B.",
+    title:
+      "Building Back Better: Modeling Decentralized Recovery in Sociotechnical Systems Using Strategic Network Dynamics",
+    venue: "Reliability Engineering & System Safety, 246: 110085",
+    year: 2024,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://www.sciencedirect.com/science/article/pii/S0951832024001595",
+      },
+      { label: "DOI", href: "https://doi.org/10.1016/j.ress.2024.110085" },
+    ],
+  },
+  {
+    authors: "Cao, Q., & Heydari, B.",
+    title:
+      "Micro-level Social Structures and the Success of COVID-19 National Policies",
+    venue: "Nature Computational Science, 2(9): 595–604",
+    year: 2022,
+    links: [
+      {
+        label: "Publisher",
+        href: "https://www.nature.com/articles/s43588-022-00314-0",
+      },
+    ],
+  },
+];
+
+// Group by year, newest first.
+const byYear = entries.reduce<Record<number, Entry[]>>((acc, e) => {
+  (acc[e.year] ||= []).push(e);
+  return acc;
+}, {});
+const years = Object.keys(byYear)
+  .map(Number)
+  .sort((a, b) => b - a);
+---
+
+<BaseLayout
+  title="Publications"
+  description="Selected publications by members of the MAGICS Lab."
+>
+  <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
+    <p class="eyebrow mb-3">Publications</p>
+    <h1 class="h-display text-4xl sm:text-6xl leading-[1.05] max-w-3xl">
+      Selected work.
+    </h1>
+    <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
+      A curated selection of recent and representative papers. A full,
+      automatically-generated list will live here later.
+    </p>
+    <div
+      class="mt-6 rounded-lg bg-gold/10 ring-1 ring-gold/30 px-4 py-3 text-sm text-ink-soft inline-block"
+    >
+      <strong class="text-ink">TODO:</strong> wire this page up to a BibTeX file —
+      see the comment block in <code>src/pages/publications.astro</code>.
+    </div>
+  </section>
+
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-16 sm:mt-20 pb-8">
+    {
+      years.map((y) => (
+        <div class="mb-12">
+          <SectionHeader eyebrow="Year" title={String(y)} />
+          <ol class="divide-y hairline">
+            {byYear[y].map((e) => (
+              <li class="py-5 sm:py-6 flex flex-col sm:flex-row sm:gap-8">
+                <span class="eyebrow shrink-0 sm:w-28 sm:pt-1">
+                  {e.venue.split(",")[0]}
+                </span>
+                <div class="flex-1">
+                  <p class="h-display text-lg sm:text-xl leading-snug mb-1">
+                    {e.title}
+                  </p>
+                  <p class="text-sm text-ink-muted mb-1">{e.authors}</p>
+                  <p class="text-sm text-ink-soft mb-2 italic">{e.venue}.</p>
+                  {e.links && e.links.length > 0 && (
+                    <p class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                      {e.links.map((l) => (
+                        <a
+                          href={l.href}
+                          class="text-ember-dark underline decoration-ember/40 underline-offset-2 hover:decoration-ember"
+                        >
+                          {l.label}
+                        </a>
+                      ))}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </section>
+</BaseLayout>

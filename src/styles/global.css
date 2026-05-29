@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -----------------------------------------------------------------
+   MAGICS Lab — global styles
+   Palette and typography are configured in tailwind.config.mjs.
+   ----------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+  --rule: 229 217 190; /* rgb-equivalent for hairline rules */
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  @apply bg-cream text-ink font-sans;
+  font-feature-settings: "ss01", "kern", "liga";
+}
+
+::selection {
+  background: theme("colors.ember.soft");
+  color: theme("colors.ink.DEFAULT");
+}
+
+/* Editorial display headings */
+.h-display {
+  @apply font-display font-medium tracking-tight text-ink;
+  font-feature-settings: "ss01", "ss02", "lnum";
+  font-optical-sizing: auto;
+}
+
+/* Small uppercase "eyebrow" label above headings */
+.eyebrow {
+  @apply font-sans uppercase text-xs font-semibold tracking-eyebrow text-ember-dark;
+}
+
+/* Thin hairline rule used throughout */
+.hairline {
+  border-color: theme("colors.rule");
+}
+
+/* Focus ring for keyboard nav (accessible) */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid theme("colors.ember.DEFAULT");
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Scroll-reveal ----
+   Elements with [data-reveal] start translated down + faded.
+   A tiny script in BaseLayout flips them in when they enter view.
+   Respects prefers-reduced-motion. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 700ms theme("transitionTimingFunction.editorial"),
+    transform 700ms theme("transitionTimingFunction.editorial");
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Page transition: soft cross-fade between pages */
+@view-transition {
+  navigation: auto;
+}
+
+/* Editorial drop-cap for the first paragraph of long-form pages */
+.dropcap > p:first-of-type::first-letter {
+  @apply font-display text-ember-dark;
+  font-size: 3.6rem;
+  line-height: 0.9;
+  float: left;
+  padding: 0.25rem 0.6rem 0 0;
+  font-weight: 500;
+}
+
+/* Prose tweaks for paper detail pages */
+.prose-editorial {
+  @apply font-sans text-ink leading-relaxed;
+}
+.prose-editorial p {
+  @apply mb-5;
+}
+.prose-editorial h2 {
+  @apply font-display text-2xl mt-10 mb-3 text-ink;
+}
+.prose-editorial a {
+  @apply text-ember-dark underline decoration-ember/40 underline-offset-2 hover:decoration-ember;
+}
+.prose-editorial ul {
+  @apply list-disc pl-6 mb-5;
+}
+.prose-editorial blockquote {
+  @apply border-l-2 border-ember/60 pl-4 italic text-ink-soft;
+}
+
+/* Print: keep it civilized */
+@media print {
+  body {
+    background: white;
+  }
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+}

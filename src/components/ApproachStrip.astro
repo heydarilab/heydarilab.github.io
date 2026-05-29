@@ -1,0 +1,52 @@
+---
+/**
+ * ApproachStrip — the lab's four-stage approach.
+ * UNDERSTAND → MODEL → DESIGN → GOVERN.
+ */
+const stages = [
+  {
+    label: "Understand",
+    color: "ember",
+    body: "Discover and analyze complex systems — what's actually happening, and why.",
+  },
+  {
+    label: "Model",
+    color: "gold",
+    body: "Build analytical, simulation, and empirical models — including causal inference where it counts.",
+  },
+  {
+    label: "Design",
+    color: "teal",
+    body: "Engineer architectures and interventions that work with the system's structure, not against it.",
+  },
+  {
+    label: "Govern",
+    color: "ink",
+    body: "Align incentives and rules for better collective outcomes.",
+  },
+];
+
+const stripe: Record<string, string> = {
+  ember: "bg-ember",
+  gold: "bg-gold",
+  teal: "bg-teal",
+  ink: "bg-ink",
+};
+---
+
+<ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    stages.map((s, i) => (
+      <li
+        data-reveal
+        style={`--reveal-delay:${i * 100}ms`}
+        class="relative rounded-xl bg-cream-card ring-1 ring-rule/80 p-5 sm:p-6 overflow-hidden"
+      >
+        <span class:list={["absolute top-0 left-0 h-1 w-full", stripe[s.color]]} aria-hidden="true" />
+        <p class="eyebrow mb-3">Stage {i + 1}</p>
+        <h3 class="h-display text-2xl mb-2">{s.label}</h3>
+        <p class="text-sm text-ink-soft leading-relaxed">{s.body}</p>
+      </li>
+    ))
+  }
+</ol>

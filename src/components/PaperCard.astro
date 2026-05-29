@@ -1,0 +1,76 @@
+---
+/**
+ * PaperCard — uniform card used on the Highlights grid.
+ * Renders either the supplied image or an inline schematic.
+ */
+import { Image } from "astro:assets";
+import PaperSchematic from "./PaperSchematic.astro";
+import type { SchematicId } from "../lib/schematics";
+
+interface Props {
+  href: string;
+  title: string;
+  hook: string;
+  venue: string;
+  year: number;
+  authors: string[];
+  image?: ImageMetadata;
+  imageAlt?: string;
+  schematicId?: SchematicId;
+  /** Use the lighter inner padding when shown in a tight teaser strip. */
+  compact?: boolean;
+}
+
+const {
+  href,
+  title,
+  hook,
+  venue,
+  year,
+  authors,
+  image,
+  imageAlt = "",
+  schematicId,
+  compact = false,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    "group flex flex-col h-full rounded-xl bg-cream-card border hairline overflow-hidden",
+    "shadow-card hover:shadow-cardHover transition-shadow duration-500 ease-editorial",
+  ]}
+>
+  <div class="relative aspect-[16/9] overflow-hidden bg-cream">
+    {
+      image ? (
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 90vw"
+          class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-[1.03]"
+          loading="lazy"
+        />
+      ) : schematicId ? (
+        <div class="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.02]">
+          <PaperSchematic id={schematicId} />
+        </div>
+      ) : (
+        <div class="absolute inset-0 flex items-center justify-center text-ink-muted text-xs">
+          (figure placeholder)
+        </div>
+      )
+    }
+  </div>
+
+  <div class:list={["flex flex-col flex-1", compact ? "p-4" : "p-5 sm:p-6"]}>
+    <p class="eyebrow mb-2">{venue} · {year}</p>
+    <h3 class="h-display text-lg sm:text-xl leading-snug mb-2">{title}</h3>
+    <p class="text-ink-soft text-sm leading-relaxed mb-4">{hook}</p>
+    <p class="mt-auto text-xs text-ink-muted truncate">
+      {authors.join(", ")}
+    </p>
+  </div>
+</a>

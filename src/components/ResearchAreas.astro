@@ -1,0 +1,74 @@
+---
+/**
+ * ResearchAreas — three-column block describing the lab's research areas.
+ * Mirrors the three numbered panels in the overview figure.
+ */
+const areas = [
+  {
+    n: 1,
+    color: "gold",
+    title: "Human & AI Agents",
+    body: "Modeling, learning, and decision-making of social and AI agents — from boundedly-rational humans to large language models acting under strategic incentives.",
+  },
+  {
+    n: 2,
+    color: "ember",
+    title: "Network & Interaction Architecture",
+    body: "Structure, modularity, information flow, and interaction architecture in networked sociotechnical systems — and how those choices shape what the system can do.",
+  },
+  {
+    n: 3,
+    color: "teal",
+    title: "System Behavior & Dynamics",
+    body: "Emergent structures and behavior, social norms, resilience, stability, coordination, and cooperation — the dynamics that ride on top of structure and agent design.",
+  },
+];
+
+// Tailwind needs the literal classnames present in source for purge.
+// Keep this map explicit rather than building strings dynamically.
+const accent: Record<string, { bg: string; ring: string; chip: string }> = {
+  gold: {
+    bg: "bg-gold/10",
+    ring: "ring-gold/30",
+    chip: "bg-gold text-cream",
+  },
+  ember: {
+    bg: "bg-ember/10",
+    ring: "ring-ember/30",
+    chip: "bg-ember text-cream",
+  },
+  teal: {
+    bg: "bg-teal/10",
+    ring: "ring-teal/30",
+    chip: "bg-teal text-cream",
+  },
+};
+---
+
+<div class="grid gap-6 md:grid-cols-3">
+  {
+    areas.map((a, i) => (
+      <article
+        data-reveal
+        style={`--reveal-delay:${i * 80}ms`}
+        class:list={[
+          "relative p-6 sm:p-7 rounded-xl ring-1 bg-cream-card",
+          accent[a.color].bg,
+          accent[a.color].ring,
+        ]}
+      >
+        <span
+          class:list={[
+            "inline-flex items-center justify-center h-8 w-8 rounded-full font-display text-base font-medium mb-4",
+            accent[a.color].chip,
+          ]}
+          aria-hidden="true"
+        >
+          {a.n}
+        </span>
+        <h3 class="h-display text-xl mb-2">{a.title}</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">{a.body}</p>
+      </article>
+    ))
+  }
+</div>

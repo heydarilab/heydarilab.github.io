@@ -1,0 +1,197 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NetworkHero from "../components/NetworkHero.astro";
+import OverviewFigure from "../components/OverviewFigure.astro";
+import ResearchAreas from "../components/ResearchAreas.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import PaperCard from "../components/PaperCard.astro";
+import NewsList from "../components/NewsList.astro";
+
+// Pull the published, ordered Highlights and News for the homepage teasers.
+const highlights = (await getCollection("highlights", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const news = (await getCollection("news", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 4);
+---
+
+<BaseLayout title="MAGICS Lab">
+  <!-- ============================== Hero ============================== -->
+  <NetworkHero>
+    <section class="max-w-page mx-auto px-5 sm:px-8 py-24 sm:py-32 lg:py-40">
+      <div class="max-w-3xl">
+        <p class="eyebrow mb-4">Northeastern University</p>
+        <h1
+          class="h-display text-4xl sm:text-6xl lg:text-7xl leading-[1.02] tracking-tight"
+        >
+          Design &amp; Governance
+          <span class="block">
+            of
+            <span class="text-ember">Intelligent</span>
+            <span class="text-teal">Complex</span>
+            <span class="text-gold">Systems</span>
+          </span>
+        </h1>
+        <p
+          class="mt-7 text-ink-soft text-lg sm:text-xl max-w-2xl leading-relaxed"
+        >
+          MAGICS Lab — <span class="font-medium text-ink"
+            >Multi-Agent Intelligent Complex Systems</span
+          > — takes a sociotechnical perspective on the design and governance of
+          complex engineering systems, bringing together technical design, models
+          of human behavior, and policy.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href="/research"
+            class="inline-flex items-center gap-2 bg-ink text-cream px-5 py-3 rounded-full text-sm font-medium hover:bg-ember-dark transition-colors"
+          >
+            Explore the research
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="/highlights"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium text-ink ring-1 ring-ink/15 hover:ring-ink/40 transition-colors"
+          >
+            Key papers
+          </a>
+        </div>
+      </div>
+    </section>
+  </NetworkHero>
+
+  <!-- =========================== Mission =========================== -->
+  <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      <div class="lg:col-span-5" data-reveal>
+        <p class="eyebrow mb-3">Mission</p>
+        <h2 class="h-display text-3xl sm:text-4xl leading-tight">
+          A sociotechnical lens on
+          <span class="text-ember">complex systems</span>.
+        </h2>
+      </div>
+      <div
+        class="lg:col-span-7 text-ink-soft text-lg leading-relaxed dropcap"
+        data-reveal
+        style="--reveal-delay:100ms"
+      >
+        <p>
+          MAGICS Lab takes a sociotechnical perspective toward the design and
+          governance of complex engineering systems, bringing together
+          technical design, models of human behavior, and policy and
+          regulation.
+        </p>
+        <p>
+          Founded in 2019, the lab evolved from CENS Lab (Complex Evolving
+          Networked Systems), active 2011–2018. Our work spans multi-agent
+          reinforcement learning, network science, behavioral modeling, and
+          the strategic behavior of human and AI agents in sociotechnical
+          settings.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Overview figure ===================== -->
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-20 sm:mt-24">
+    <div
+      class="rounded-2xl bg-cream-card ring-1 ring-rule/80 p-3 sm:p-6"
+      data-reveal
+    >
+      <OverviewFigure />
+    </div>
+    <p class="text-center text-xs text-ink-muted mt-3">
+      The lab in one figure — three research areas around a multi-agent
+      network motif, anchored to a four-stage approach.
+    </p>
+  </section>
+
+  <!-- ===================== Research areas ===================== -->
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 sm:mt-32">
+    <SectionHeader
+      eyebrow="Three research areas"
+      title="Where we work."
+      kicker="Three intersecting research areas, each with its own methods and questions, and each feeding into the others."
+    />
+    <ResearchAreas />
+  </section>
+
+  <!-- ===================== Highlights teaser ===================== -->
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 sm:mt-32">
+    <div class="flex items-end justify-between gap-6 mb-8 sm:mb-12">
+      <SectionHeader
+        eyebrow="Key papers"
+        title="Highlights."
+      />
+      <a
+        href="/highlights"
+        class="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-ember-dark"
+      >
+        All highlights <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    {
+      highlights.length > 0 ? (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {highlights.map((p, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 90}ms`} class="h-full">
+              <PaperCard
+                href={`/highlights/${p.slug}`}
+                title={p.data.title}
+                hook={p.data.hook}
+                venue={p.data.venue}
+                year={p.data.year}
+                authors={p.data.authors}
+                image={p.data.image}
+                imageAlt={p.data.imageAlt}
+                schematicId={p.data.schematicId}
+                compact
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="text-ink-muted">No highlights yet.</p>
+      )
+    }
+    <div class="mt-8 sm:hidden">
+      <a
+        href="/highlights"
+        class="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-ember-dark"
+      >
+        All highlights <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== Latest news ===================== -->
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 sm:mt-32 pb-8">
+    <div class="flex items-end justify-between gap-6 mb-4">
+      <SectionHeader
+        eyebrow="Updates"
+        title="Latest news."
+      />
+      <a
+        href="/news"
+        class="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-ember-dark"
+      >
+        All news <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div data-reveal>
+      <NewsList items={news} />
+    </div>
+    <div class="mt-6 sm:hidden">
+      <a
+        href="/news"
+        class="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-ember-dark"
+      >
+        All news <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
