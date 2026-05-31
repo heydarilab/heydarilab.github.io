@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import NetworkHero from "../components/NetworkHero.astro";
-import OverviewFigure from "../components/OverviewFigure.astro";
 import ResearchAreas from "../components/ResearchAreas.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import PaperCard from "../components/PaperCard.astro";
@@ -96,13 +95,27 @@ const news = (await getCollection("news", ({ data }) => !data.draft))
   </section>
 
   <!-- ===================== Overview figure ===================== -->
+  <!--
+    The original lab overview figure lives in public/figures/overview/.
+    If you'd rather use the inline-SVG recreation (themed with the same
+    palette, infinitely sharp), swap this <img> for <OverviewFigure />
+    and re-import the component at the top of this file. See README §9.
+  -->
   <section class="max-w-page mx-auto px-5 sm:px-8 mt-20 sm:mt-24">
-    <div
+    <figure
       class="rounded-2xl bg-cream-card ring-1 ring-rule/80 p-3 sm:p-6"
       data-reveal
     >
-      <OverviewFigure />
-    </div>
+      <img
+        src="/figures/overview/magics-overview.png"
+        alt="MAGICS Lab overview — three research areas (Human and AI Agents; Network and Interaction Architecture; System Behavior and Dynamics) arranged around a central MAGICS Lab network motif, with a four-stage approach strip below (Understand, Model, Design, Govern)."
+        width="1536"
+        height="1024"
+        class="w-full h-auto rounded-lg"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
     <p class="text-center text-xs text-ink-muted mt-3">
       The lab in one figure — three research areas around a multi-agent
       network motif, anchored to a four-stage approach.

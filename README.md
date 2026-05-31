@@ -224,15 +224,31 @@ picks the right version.
 
 ## 9. About the lab overview figure
 
-The overview figure on the homepage is rendered as an **inline SVG**
-(`src/components/OverviewFigure.astro`). This keeps it crisp at any size and
-lets the colors come from the same Tailwind palette as the rest of the site.
+The homepage shows the **original PNG of the lab's overview figure** at
+`public/figures/overview/magics-overview.png`. To replace it, drop a new
+file at that path (same name) and push.
 
-If you'd rather use the original PNG version of the figure:
+A faithful **inline-SVG** recreation also ships in
+`src/components/OverviewFigure.astro` — same layout and palette as the PNG,
+but infinitely sharp and theme-able. If you'd rather use the SVG version,
+open `src/pages/index.astro` and replace the `<img …>` tag in the
+"Overview figure" section with `<OverviewFigure />`, then re-add the
+import at the top of the file.
 
-1. Drop the PNG at `public/figures/overview/magics-overview.png`.
-2. In `src/pages/index.astro`, replace the `<OverviewFigure />` line with an
-   `<img>` tag pointing to that file.
+The OG (social-share) image is a 1200×630 PNG at `public/og-image.png`,
+auto-generated from the same source figure. To regenerate it from a
+new source, the quickest path is a one-liner in Python:
+
+```python
+from PIL import Image
+src = Image.open("public/figures/overview/magics-overview.png").convert("RGBA")
+canvas = Image.new("RGB", (1200, 630), (251, 246, 235))   # cream background
+scale = min(1200 / src.width, 630 / src.height)
+nw, nh = int(src.width * scale), int(src.height * scale)
+resized = src.resize((nw, nh), Image.LANCZOS)
+canvas.paste(resized, ((1200 - nw) // 2, (630 - nh) // 2), resized)
+canvas.save("public/og-image.png", optimize=True)
+```
 
 ---
 
