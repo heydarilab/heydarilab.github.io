@@ -8,8 +8,8 @@ authors:
 venue: "Strategic Management Journal"
 year: 2026
 order: 20
-schematicId: "core-periphery"
-imageAlt: "Stylized firm network with a dense core of low-imitator inventors and a sparser periphery of high-imitator inventors."
+image: "../../assets/papers/core-periphery-fig1.jpg"
+imageAlt: "Three-layer model diagram: inventor types layer (heterogeneity in search distance and adoption approach), organization-design layer (core-periphery networks for information sharing), and performance-landscape layer (a rugged NK-style landscape), with arrows describing how types are allocated to network positions and how agents search and feed back performance scores."
 links:
   - label: "Publisher"
     href: "https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/smj.70005"
