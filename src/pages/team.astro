@@ -1,67 +1,194 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 
 // ---------------------------------------------------------------
-// TODO — replace placeholder members with real entries.
-// Add a member by appending an object to `members` below.
-// `kind`: "director" | "phd" | "postdoc" | "alumni" | "collaborator"
-// `photo`: optional path under /public/team/, e.g. "/team/jane.jpg"
+// Roster
+//
+// To add a member:
+//   1. Append an entry to the `members` array below.
+//   2. (Optional) drop a portrait into `public/team/<slug>.{jpg|png|webp}`
+//      using the `slug` you set on the entry. If a matching file exists
+//      it's used automatically; otherwise the initials placeholder shows.
+//
+// `kind`: "director" | "phd" | "postdoc" | "msc" | "alumni" | "visiting"
+//   - "director" appears in the Director section.
+//   - "phd" / "postdoc" / "msc" appear under Current members.
+//   - "alumni" / "visiting" appear under Past graduate students & postdocs.
 // ---------------------------------------------------------------
+type Kind =
+  | "director"
+  | "phd"
+  | "postdoc"
+  | "msc"
+  | "alumni"
+  | "visiting";
+
 type Member = {
+  slug: string;
   name: string;
   role: string;
-  kind: "director" | "phd" | "postdoc" | "alumni" | "collaborator";
+  kind: Kind;
   bio?: string;
   link?: string;
-  photo?: string;
 };
 
 const members: Member[] = [
+  // ---- Current ----
   {
+    slug: "babak-heydari",
     name: "Babak Heydari",
-    role: "Director · Professor, Northeastern University",
+    role: "Director · Associate Professor, Northeastern University",
     kind: "director",
-    bio: "Works on the design and governance of complex sociotechnical systems — from networked organizations to multi-agent AI.",
+    bio: "Works on the design and governance of complex sociotechnical systems — from networked organizations to multi-agent AI — at the intersection of engineering, behavioral science, and policy.",
     link: "https://coe.northeastern.edu/people/heydari-babak/",
   },
   {
-    name: "Lab Member — TODO",
-    role: "PhD student",
+    slug: "negin-maddah",
+    name: "Negin Maddah",
+    role: "PhD Student",
     kind: "phd",
-    bio: "Replace this placeholder with a real member. Edit src/pages/team.astro and append an entry to the members array.",
+    bio: "Complex networks, computational social science, intelligent sociotechnical systems, and process mining.",
   },
   {
-    name: "Lab Member — TODO",
-    role: "Postdoctoral researcher",
-    kind: "postdoc",
-    bio: "Replace this placeholder. Photos go in public/team/.",
+    slug: "sepehr-ilami",
+    name: "Sepehr Ilami",
+    role: "PhD Student",
+    kind: "phd",
+    bio: "Computational social science, collective behavior, and multi-agent decision-making — how humans and AI agents coordinate and influence each other in networked environments.",
+    link: "https://sepehrilami.com/",
+  },
+  {
+    slug: "nunzio-lore",
+    name: "Nunzio Lorè",
+    role: "PhD Student",
+    kind: "phd",
+    bio: "Network science, game theory, agent-based modeling, fairness in AI platforms — and the strategic behavior of large language models.",
+    link: "https://netsi.khoury.northeastern.edu/people/nunzio-lore/",
+  },
+
+  // ---- Past graduate students & postdocs ----
+  {
+    slug: "qingtao-cao",
+    name: "Qingtao Cao",
+    role: "PhD",
+    kind: "alumni",
+    bio: "Network science, multi-agent systems, the sharing economy, computational methods for policy and regulation, spatiotemporal data analysis.",
+  },
+  {
+    slug: "soumyakant-padhee",
+    name: "Soumyakant Padhee",
+    role: "PhD",
+    kind: "alumni",
+    bio: "Innovation in engineering design teams, causal identification in sociotechnical systems, experimental methods.",
+  },
+  {
+    slug: "qiliang-chen",
+    name: "Qiliang Chen",
+    role: "PhD",
+    kind: "alumni",
+    bio: "Artificial intelligence, meta reinforcement learning, modularity, multi-agent systems, interpretable AI.",
+  },
+  {
+    slug: "gabriele-ansaldo",
+    name: "Gabriele Ansaldo",
+    role: "MSc",
+    kind: "alumni",
+    bio: "Human–robot teaming, multi-agent systems, trustworthy AI.",
+  },
+  {
+    slug: "mohsen-mosleh",
+    name: "Mohsen Mosleh",
+    role: "PhD",
+    kind: "alumni",
+  },
+  {
+    slug: "david-gianetto",
+    name: "David Gianetto",
+    role: "PhD",
+    kind: "alumni",
+  },
+  {
+    slug: "kia-dalili",
+    name: "Kia Dalili",
+    role: "Postdoctoral fellow",
+    kind: "alumni",
+  },
+  {
+    slug: "abhilash-janardhanan",
+    name: "Abhilash Janardhanan",
+    role: "MSc",
+    kind: "alumni",
+  },
+  {
+    slug: "liang-ke",
+    name: "Liang Ke",
+    role: "Graduate researcher",
+    kind: "alumni",
+  },
+  {
+    slug: "amar-chheda",
+    name: "Amar Chheda",
+    role: "Graduate researcher",
+    kind: "alumni",
+  },
+  {
+    slug: "peter-ludlow",
+    name: "Peter Ludlow",
+    role: "Graduate researcher",
+    kind: "alumni",
+  },
+  {
+    slug: "abbas-ehsanfar",
+    name: "Abbas Ehsanfar",
+    role: "Graduate researcher",
+    kind: "alumni",
+  },
+  {
+    slug: "yakov-bart",
+    name: "Yakov Bart",
+    role: "Visiting faculty",
+    kind: "visiting",
   },
 ];
 
+// ---- Photo lookup ----
+// If a file matching the member's slug exists under public/team/, use it.
+// Lets you drop a photo in later without editing this file again.
+const TEAM_DIR = path.resolve("./public/team");
+const photoExts = [".jpg", ".jpeg", ".png", ".webp"];
+function photoFor(slug: string): string | undefined {
+  for (const ext of photoExts) {
+    const filename = `${slug}${ext}`;
+    if (fs.existsSync(path.join(TEAM_DIR, filename))) {
+      return `/team/${filename}`;
+    }
+  }
+  return undefined;
+}
+
 const director = members.find((m) => m.kind === "director");
-const others = members.filter((m) => m.kind !== "director");
-
-const groupLabel: Record<Member["kind"], string> = {
-  director: "Director",
-  phd: "PhD students",
-  postdoc: "Postdocs",
-  alumni: "Alumni",
-  collaborator: "Collaborators",
-};
-
-const byKind = (["phd", "postdoc", "alumni", "collaborator"] as const).map(
-  (k) => ({
-    key: k,
-    label: groupLabel[k],
-    items: others.filter((m) => m.kind === k),
-  }),
+const currentStudents = members.filter((m) =>
+  ["phd", "postdoc", "msc"].includes(m.kind),
 );
+const pastMembers = members.filter((m) =>
+  ["alumni", "visiting"].includes(m.kind),
+);
+
+const initials = (name: string): string =>
+  name
+    .split(/\s+/)
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 ---
 
 <BaseLayout
   title="Team"
-  description="The people of the MAGICS Lab — director, students, postdocs, and collaborators."
+  description="The people of the MAGICS Lab — director, current students, and past graduate students, postdocs, and visiting faculty."
 >
   <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
     <p class="eyebrow mb-3">Team</p>
@@ -70,10 +197,12 @@ const byKind = (["phd", "postdoc", "alumni", "collaborator"] as const).map(
     </h1>
     <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
       A small group of researchers working across multi-agent systems,
-      network science, and the governance of complex sociotechnical settings.
+      network science, and the governance of complex sociotechnical
+      settings.
     </p>
   </section>
 
+  {/* ============================ Director ============================ */}
   {
     director && (
       <section class="max-w-page mx-auto px-5 sm:px-8 mt-16 sm:mt-20">
@@ -83,18 +212,17 @@ const byKind = (["phd", "postdoc", "alumni", "collaborator"] as const).map(
           data-reveal
         >
           <div class="sm:col-span-4">
-            {director.photo ? (
+            {photoFor(director.slug) ? (
               <img
-                src={director.photo}
+                src={photoFor(director.slug)}
                 alt={director.name}
-                class="w-full rounded-xl ring-1 ring-rule"
+                class="w-full aspect-[4/5] object-cover rounded-xl ring-1 ring-rule"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div class="aspect-[4/5] rounded-xl bg-gradient-to-br from-ember/15 via-gold/15 to-teal/15 ring-1 ring-rule flex items-center justify-center font-display text-5xl text-ink/40">
-                {director.name
-                  .split(" ")
-                  .map((p) => p[0])
-                  .join("")}
+                {initials(director.name)}
               </div>
             )}
           </div>
@@ -117,61 +245,103 @@ const byKind = (["phd", "postdoc", "alumni", "collaborator"] as const).map(
     )
   }
 
+  {/* ======================== Current students ======================== */}
   {
-    byKind.map((group) =>
-      group.items.length === 0 ? null : (
-        <section class="max-w-page mx-auto px-5 sm:px-8 mt-20">
-          <SectionHeader eyebrow="Lab members" title={group.label} />
-          <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {group.items.map((m, i) => (
-              <li
-                data-reveal
-                style={`--reveal-delay:${i * 60}ms`}
-                class="p-5 sm:p-6 rounded-xl bg-cream-card ring-1 ring-rule/80 flex gap-4 items-start"
-              >
+    currentStudents.length > 0 && (
+      <section class="max-w-page mx-auto px-5 sm:px-8 mt-24">
+        <SectionHeader eyebrow="Lab members" title="Current students." />
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {currentStudents.map((m, i) => (
+            <li
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+              class="p-5 sm:p-6 rounded-xl bg-cream-card ring-1 ring-rule/80 flex flex-col"
+            >
+              <div class="flex gap-4 items-start">
                 <div class="shrink-0">
-                  {m.photo ? (
+                  {photoFor(m.slug) ? (
                     <img
-                      src={m.photo}
+                      src={photoFor(m.slug)}
                       alt={m.name}
-                      class="w-16 h-16 rounded-full object-cover ring-1 ring-rule"
+                      class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-1 ring-rule"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
-                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-ember/20 via-gold/20 to-teal/20 ring-1 ring-rule flex items-center justify-center font-display text-xl text-ink/50">
-                      {m.name
-                        .split(" ")
-                        .map((p) => p[0])
-                        .slice(0, 2)
-                        .join("")}
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-ember/20 via-gold/20 to-teal/20 ring-1 ring-rule flex items-center justify-center font-display text-2xl text-ink/50">
+                      {initials(m.name)}
                     </div>
                   )}
                 </div>
-                <div>
+                <div class="min-w-0">
                   <p class="font-display text-lg leading-tight">{m.name}</p>
-                  <p class="text-xs text-ink-muted mb-2">{m.role}</p>
-                  {m.bio && (
-                    <p class="text-sm text-ink-soft leading-relaxed">
-                      {m.bio}
-                    </p>
+                  <p class="text-xs text-ink-muted mt-0.5 mb-2">{m.role}</p>
+                  {m.link && (
+                    <a
+                      href={m.link}
+                      class="inline-flex items-center gap-1 text-xs font-medium text-ember-dark hover:text-ember"
+                    >
+                      Website <span aria-hidden="true">↗</span>
+                    </a>
                   )}
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ),
+              </div>
+              {m.bio && (
+                <p class="mt-4 text-sm text-ink-soft leading-relaxed">
+                  {m.bio}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
     )
   }
 
-  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 mb-8">
-    <div
-      class="rounded-xl bg-cream-card ring-1 ring-rule/80 p-6 sm:p-8 text-sm text-ink-muted"
-    >
-      <p>
-        <strong class="text-ink">TODO:</strong> Replace placeholders above with the
-        current team. The list lives in <code>src/pages/team.astro</code>; see the
-        README for a template entry.
-      </p>
-    </div>
-  </section>
+  {/* ================== Past graduate students & postdocs ================== */}
+  {
+    pastMembers.length > 0 && (
+      <section class="max-w-page mx-auto px-5 sm:px-8 mt-24 mb-8">
+        <SectionHeader
+          eyebrow="Lab alumni"
+          title="Past graduate students & postdocs."
+          kicker="Members who have moved on to faculty positions, industry, and other research labs."
+        />
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {pastMembers.map((m, i) => (
+            <li
+              data-reveal
+              style={`--reveal-delay:${i * 40}ms`}
+              class="p-4 sm:p-5 rounded-xl bg-cream-card/60 ring-1 ring-rule/60 flex gap-4 items-start"
+            >
+              <div class="shrink-0">
+                {photoFor(m.slug) ? (
+                  <img
+                    src={photoFor(m.slug)}
+                    alt={m.name}
+                    class="w-14 h-14 rounded-full object-cover ring-1 ring-rule"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="w-14 h-14 rounded-full bg-gradient-to-br from-ember/10 via-gold/10 to-teal/10 ring-1 ring-rule flex items-center justify-center font-display text-base text-ink/45">
+                    {initials(m.name)}
+                  </div>
+                )}
+              </div>
+              <div class="min-w-0">
+                <p class="font-display text-base leading-tight">{m.name}</p>
+                <p class="text-xs text-ink-muted mt-0.5">{m.role}</p>
+                {m.bio && (
+                  <p class="mt-2 text-xs text-ink-soft leading-relaxed">
+                    {m.bio}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </BaseLayout>
