@@ -3,14 +3,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 
 // ---------------------------------------------------------------
-// Placeholder publications list.
-// TODO — replace this hand-curated array with a BibTeX-driven build.
-// One sensible path:
-//   1. Drop a `publications.bib` file into the project root.
-//   2. Add a small build step using @citation-js/core or similar to
-//      transform .bib → JSON, then map the JSON into the same shape as
-//      `entries` below.
-// Until then, this page renders the entries you add by hand here.
+// Selected publications, going back to 2021. Sourced from
+// https://scholar.google.com/citations?user=JT9g8lAAAAAJ
+//
+// To add a paper, append an entry to the `entries` array. Use
+// `links` to add Publisher / arXiv / DOI links. The page groups
+// automatically by year (newest first) and renders the venue line
+// in italics.
 // ---------------------------------------------------------------
 type Entry = {
   authors: string;
@@ -20,14 +19,78 @@ type Entry = {
   links?: { label: string; href: string }[];
 };
 
+const SCHOLAR_URL =
+  "https://scholar.google.com/citations?hl=en&user=JT9g8lAAAAAJ&view_op=list_works&sortby=pubdate";
+
 const entries: Entry[] = [
+  // -------------------- 2026 --------------------
   {
+    title:
+      "Adaptive Information Modulation: Designing Governance Mechanisms for Multi-Agent AI Systems",
+    authors: "Q. Chen, S. Ilami, N. Lorè, & B. Heydari",
+    venue: "Journal of Mechanical Design (in press)",
+    year: 2026,
+  },
+  {
+    title:
+      "Architecting adaptive networks: Reinforcement learning with generative policies for multi-agent governance",
+    authors: "Q. Chen & B. Heydari",
+    venue: "Journal of Mechanical Design, 148(1): 011701",
+    year: 2026,
+  },
+  {
+    title: "Communication Enhances LLMs' Stability in Strategic Thinking",
+    authors: "N. Lorè & B. Heydari",
+    venue: "arXiv preprint, arXiv:2602.06081",
+    year: 2026,
+    links: [{ label: "arXiv", href: "https://arxiv.org/abs/2602.06081" }],
+  },
+  {
+    title:
+      "The Architecture of Illusion: Network Opacity and Strategic Escalation",
     authors:
-      "Heydari, B., Chattopadhyay, S., Padhee, S., & Karim, S.",
+      "R. Ebrahimi, S. Ilami, B. Heydari, I. Trevino, & M. Franceschetti",
+    venue: "arXiv preprint, arXiv:2602.10053",
+    year: 2026,
+    links: [{ label: "arXiv", href: "https://arxiv.org/abs/2602.10053" }],
+  },
+  {
+    title:
+      "Cognitive Heuristics are Necessary for Human-Like Multi-Agent Dynamics in Large Language Models",
+    authors: "H. Zhu & B. Heydari",
+    venue: "SSRN working paper, 6277139",
+    year: 2026,
+    links: [
+      {
+        label: "SSRN",
+        href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6277139",
+      },
+    ],
+  },
+
+  // -------------------- 2025 --------------------
+  {
+    title:
+      "Extreme Design: An Editorial on a New Research Framework Within Engineering Design",
+    authors:
+      "T. Marion, M. Yang, A. Banzaert, K. Becker, E. Brubaker, R. Bruggeman, et al.",
+    venue: "Journal of Mechanical Design, 147(12): 120301",
+    year: 2025,
+  },
+  {
+    title:
+      "Network Topology Matters, But Not Always: Mobility Networks in Epidemic Forecasting",
+    authors: "S. Ilami, Q. Cao, & B. Heydari",
+    venue: "arXiv preprint, arXiv:2510.20025",
+    year: 2025,
+    links: [{ label: "arXiv", href: "https://arxiv.org/abs/2510.20025" }],
+  },
+  {
     title:
       "Core or Periphery: Examining Where to Allocate Heterogeneous Inventors and the Impact on Firms' Innovation",
-    venue: "Strategic Management Journal, 47(2): 331–363",
-    year: 2026,
+    authors: "B. Heydari, S. Chattopadhyay, S. Padhee, & S. Karim",
+    venue: "Strategic Management Journal",
+    year: 2025,
     links: [
       {
         label: "Publisher",
@@ -36,10 +99,10 @@ const entries: Entry[] = [
     ],
   },
   {
-    authors: "Chen, Q., & Heydari, B.",
     title:
-      "Resource Governance in Networked Systems via Integrated Variational Autoencoders and Reinforcement Learning",
-    venue: "ASME Journal of Mechanical Design",
+      "Generative Network Design for Multi-Agent Coordination: A VAE-Assisted Deep RL Approach",
+    authors: "Q. Chen & B. Heydari",
+    venue: "ASME Journal of Mechanical Design, 147",
     year: 2025,
     links: [
       {
@@ -50,9 +113,29 @@ const entries: Entry[] = [
     ],
   },
   {
-    authors: "Chen, Q., & Heydari, B.",
+    title:
+      "Evolution of Innovation in Technology Life Cycle: Isolating Innovation Legacy from Quality",
+    authors: "S. Padhee & B. Heydari",
+    venue: "SSRN working paper, 5283897",
+    year: 2025,
+    links: [
+      {
+        label: "SSRN",
+        href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5283897",
+      },
+    ],
+  },
+  {
+    title: "Networks and Graphs for Engineering Systems and Design (Editorial)",
+    authors: "Z. Sha, A. Layton, B. Heydari, & D.L. Van Bossuyt",
+    venue:
+      "Journal of Computing and Information Science in Engineering, 25(6): 060301",
+    year: 2025,
+  },
+  {
     title:
       "Adaptive Network Intervention for Complex Systems: A Hierarchical Graph Reinforcement Learning Approach",
+    authors: "Q. Chen & B. Heydari",
     venue:
       "ASME Journal of Computing and Information Science in Engineering, 25(6): 061006",
     year: 2025,
@@ -65,10 +148,54 @@ const entries: Entry[] = [
     ],
   },
   {
-    authors: "Lore, N., & Heydari, B.",
+    title:
+      "Competing for Attention: Explainable Deep Reinforcement Learning for Behavior-Aware Recommendations",
+    authors: "Q. Cao, Q. Chen, & B. Heydari",
+    venue: "SSRN working paper, 5284387",
+    year: 2025,
+    links: [
+      {
+        label: "SSRN",
+        href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5284387",
+      },
+    ],
+  },
+  {
+    title:
+      "Collective Artificial Intelligence: Specialist-Generalist Network Structures & Task Performance",
+    authors:
+      "J. Meluso, L. Hébert-Dufresne, B. Heydari, C. Riedl, & H.O. Gao",
+    venue: "Working paper",
+    year: 2025,
+  },
+  {
+    title:
+      "The Shifting Dynamics of Online Knowledge Platforms and the Implications for Generative AI Sustainability",
+    authors: "B. Heydari & N. Maddah",
+    venue: "SSRN working paper, 5117087",
+    year: 2025,
+    links: [
+      {
+        label: "SSRN",
+        href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5117087",
+      },
+    ],
+  },
+
+  // -------------------- 2024 --------------------
+  {
+    title:
+      "Platform-Driven Collaboration Patterns: Structural Evolution Over Time and Scale",
+    authors: "N. Maddah & B. Heydari",
+    venue:
+      "IEEE Transactions on Computational Social Systems, 11(6): 7814–7829",
+    year: 2024,
+  },
+  {
     title:
       "Strategic Behavior of Large Language Models and the Role of Game Structure versus Contextual Framing",
-    venue: "Nature Scientific Reports, 14: 18490",
+    authors: "N. Lorè & B. Heydari",
+    venue: "Scientific Reports, 14(1): 18490",
     year: 2024,
     links: [
       {
@@ -78,9 +205,29 @@ const entries: Entry[] = [
     ],
   },
   {
-    authors: "Maddah, N., & Heydari, B.",
+    title:
+      "The SoS Conductor: Orchestrating Resources with Iterative Agent-Based Reinforcement Learning",
+    authors: "Q. Chen & B. Heydari",
+    venue: "Systems Engineering, 27(4): 715–727",
+    year: 2024,
+  },
+  {
+    title:
+      "The Echo Chambers of Complexity: How Task Complexity Influences Team Groupthink and Individual Exploration",
+    authors: "S. Padhee & B. Heydari",
+    venue: "SSRN working paper, 4892421",
+    year: 2024,
+    links: [
+      {
+        label: "SSRN",
+        href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4892421",
+      },
+    ],
+  },
+  {
     title:
       "Building Back Better: Modeling Decentralized Recovery in Sociotechnical Systems Using Strategic Network Dynamics",
+    authors: "N. Maddah & B. Heydari",
     venue: "Reliability Engineering & System Safety, 246: 110085",
     year: 2024,
     links: [
@@ -91,10 +238,56 @@ const entries: Entry[] = [
       { label: "DOI", href: "https://doi.org/10.1016/j.ress.2024.110085" },
     ],
   },
+
+  // -------------------- 2023 --------------------
   {
-    authors: "Cao, Q., & Heydari, B.",
+    title:
+      "Strategic Behavior of Large Language Models: Game Structure vs. Contextual Framing",
+    authors: "N. Lorè & B. Heydari",
+    venue: "arXiv preprint, arXiv:2309.05898",
+    year: 2023,
+    links: [{ label: "arXiv", href: "https://arxiv.org/abs/2309.05898" }],
+  },
+  {
+    title:
+      "Design Teams and Industry Life Cycles: The Interplay of Innovation and Complexity",
+    authors: "S. Padhee, N. Lorè, & B. Heydari",
+    venue: "Systems Engineering, 26(5): 604–617",
+    year: 2023,
+  },
+  {
+    title:
+      "Evolution of Innovation in Industry Life Cycles: A Complex Network Perspective",
+    authors: "S. Padhee & B. Heydari",
+    venue: "Proceedings of the Design Society, 3: 1705–1714",
+    year: 2023,
+  },
+  {
+    title: "Reengineering the Sharing Economy: Design, Policy, and Regulation",
+    authors: "B. Heydari, O. Ergun, R. Dyal-Chand, & Y. Bart (Eds.)",
+    venue: "Cambridge University Press (book)",
+    year: 2023,
+  },
+
+  // -------------------- 2022 --------------------
+  {
+    title:
+      "Core or Periphery: Where Should Firms Locate Exploring Innovators? An NK-Model Investigation",
+    authors: "B. Heydari, S. Chattopadhyay, S. Padhee, & S. Karim",
+    venue: "Strategic Management Society 42nd Annual Conference",
+    year: 2022,
+  },
+  {
+    title:
+      "Dynamic Resource Allocation in Systems-of-Systems Using a Heuristic-Based Interpretable Deep Reinforcement Learning",
+    authors: "Q. Chen & B. Heydari",
+    venue: "Journal of Mechanical Design, 144(9): 091711",
+    year: 2022,
+  },
+  {
     title:
       "Micro-level Social Structures and the Success of COVID-19 National Policies",
+    authors: "Q. Cao & B. Heydari",
     venue: "Nature Computational Science, 2(9): 595–604",
     year: 2022,
     links: [
@@ -103,6 +296,44 @@ const entries: Entry[] = [
         href: "https://www.nature.com/articles/s43588-022-00314-0",
       },
     ],
+  },
+  {
+    title:
+      "A Multisource Database Tracking the Impact of the COVID-19 Pandemic on the Communities of Boston, MA, USA",
+    authors:
+      "A. Ristea, R. Tucker, S. You, M. Amiri, N. Beauchamp, E. Castro, Q. Chen, et al.",
+    venue: "Scientific Data, 9(1): 330",
+    year: 2022,
+  },
+
+  // -------------------- 2021 --------------------
+  {
+    title:
+      "When Do Coalitions Survive Over Time? Stationary Stability in Dynamic Cooperative Games",
+    authors: "B. Heydari & P. Heydari",
+    venue: "SSRN working paper",
+    year: 2021,
+  },
+  {
+    title:
+      "Airbnb and Neighborhood Crime: The Incursion of Tourists or the Erosion of Local Social Dynamics?",
+    authors: "L. Ke, D.T. O'Brien, & B. Heydari",
+    venue: "PLoS ONE, 16(7): e0253315",
+    year: 2021,
+  },
+  {
+    title:
+      "Leveraging Task Modularity in Reinforcement Learning for Adaptable Industry 4.0 Automation",
+    authors: "Q. Chen, B. Heydari, & M. Moghaddam",
+    venue: "Journal of Mechanical Design, 143(7): 071701",
+    year: 2021,
+  },
+  {
+    title:
+      "The Immediate Effect of COVID-19 Policies on Social-Distancing Behavior in the United States",
+    authors: "R. Abouk & B. Heydari",
+    venue: "Public Health Reports, 136(2): 245–252",
+    year: 2021,
   },
 ];
 
@@ -118,7 +349,7 @@ const years = Object.keys(byYear)
 
 <BaseLayout
   title="Publications"
-  description="Selected publications by members of the MAGICS Lab."
+  description="Selected publications by members of the MAGICS Lab, 2021–present. Full list on Google Scholar."
 >
   <section class="max-w-page mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
     <p class="eyebrow mb-3">Publications</p>
@@ -126,14 +357,24 @@ const years = Object.keys(byYear)
       Selected work.
     </h1>
     <p class="mt-6 text-ink-soft text-lg max-w-prose leading-relaxed">
-      A curated selection of recent and representative papers. A full,
-      automatically-generated list will live here later.
+      Lab publications from 2021 to today, grouped by year, newest first.
     </p>
+
+    {/* Google Scholar callout */}
     <div
-      class="mt-6 rounded-lg bg-gold/10 ring-1 ring-gold/30 px-4 py-3 text-sm text-ink-soft inline-block"
+      class="mt-7 rounded-xl bg-cream-card ring-1 ring-rule/80 px-5 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5"
     >
-      <strong class="text-ink">TODO:</strong> wire this page up to a BibTeX file —
-      see the comment block in <code>src/pages/publications.astro</code>.
+      <p class="text-sm text-ink-soft leading-relaxed flex-1">
+        For the complete and continuously-updated list, see Prof. Heydari's
+        <span class="text-ink">Google Scholar</span> profile.
+      </p>
+      <a
+        href={SCHOLAR_URL}
+        class="inline-flex items-center gap-2 self-start sm:self-auto bg-ink text-cream px-4 py-2 rounded-full text-sm font-medium hover:bg-ember-dark transition-colors"
+      >
+        Google Scholar
+        <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </section>
 
@@ -146,7 +387,7 @@ const years = Object.keys(byYear)
             {byYear[y].map((e) => (
               <li class="py-5 sm:py-6 flex flex-col sm:flex-row sm:gap-8">
                 <span class="eyebrow shrink-0 sm:w-28 sm:pt-1">
-                  {e.venue.split(",")[0]}
+                  {e.venue.split(",")[0].split("(")[0].trim()}
                 </span>
                 <div class="flex-1">
                   <p class="h-display text-lg sm:text-xl leading-snug mb-1">

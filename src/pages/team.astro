@@ -244,22 +244,22 @@ const initials = (name: string): string =>
           class="grid sm:grid-cols-12 gap-6 sm:gap-10 items-start"
           data-reveal
         >
-          <div class="sm:col-span-4">
+          <div class="sm:col-span-3">
             {photoFor(director.slug) ? (
               <img
                 src={photoFor(director.slug)}
                 alt={director.name}
-                class="w-full aspect-[4/5] object-cover rounded-xl ring-1 ring-rule"
+                class="w-40 sm:w-full max-w-[180px] aspect-[4/5] object-cover rounded-xl ring-1 ring-rule"
                 loading="lazy"
                 decoding="async"
               />
             ) : (
-              <div class="aspect-[4/5] rounded-xl bg-gradient-to-br from-ember/15 via-gold/15 to-teal/15 ring-1 ring-rule flex items-center justify-center font-display text-5xl text-ink/40">
+              <div class="w-40 sm:w-full max-w-[180px] aspect-[4/5] rounded-xl bg-gradient-to-br from-ember/15 via-gold/15 to-teal/15 ring-1 ring-rule flex items-center justify-center font-display text-4xl text-ink/40">
                 {initials(director.name)}
               </div>
             )}
           </div>
-          <div class="sm:col-span-8">
+          <div class="sm:col-span-9">
             <p class="font-display text-2xl text-ink mb-1">{director.role}</p>
             {director.affiliations && director.affiliations.length > 0 && (
               <ul class="text-ink-soft text-sm leading-relaxed mb-3 space-y-0.5">
