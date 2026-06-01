@@ -1,0 +1,61 @@
+---
+/**
+ * LabName — renders the lab's full name
+ *   "Multi-Agent Intelligent Complex Systems"
+ * with the six MAGICS-source initial letters (M, A, G, I, C, S)
+ * color-matched to the central MAGICS wordmark so the connection
+ * between the acronym and the full name is visually obvious.
+ *
+ * Letter map (matches the lab's overview figure):
+ *   M — ember         (Multi-Agent)
+ *   A — gold          (Multi-Agent)
+ *   G — ink           (Multi-a*g*ent)
+ *   I — teal          (Intelligent)
+ *   C — teal-dark     (Complex)
+ *   S — ink           (Systems)
+ *
+ * The component inherits its font, size, and base color from whatever
+ * element wraps it, so the same component scales from a 10pt header
+ * tagline to a 32pt hero subhead.
+ */
+interface Props {
+  /** Extra classes on the wrapping element. */
+  class?: string;
+  /** Show a small dot between phrases instead of a space. */
+  bullets?: boolean;
+  /** Make the highlighted initial letters extra-bold (default: true). */
+  boldInitials?: boolean;
+}
+
+const {
+  class: klass = "",
+  bullets = false,
+  boldInitials = true,
+} = Astro.props;
+
+const initialClass = boldInitials ? "font-semibold" : "";
+---
+
+<span class={klass}>
+  <span class:list={["text-ember", initialClass]}>M</span>ulti-<span
+    class:list={["text-gold", initialClass]}>A</span><span
+    class:list={["text-ink", initialClass]}>g</span>ent{
+    bullets ? (
+      <span class="mx-1.5 text-ink-muted/60" aria-hidden="true">·</span>
+    ) : (
+      <span> </span>
+    )
+  }<span class:list={["text-teal", initialClass]}>I</span>ntelligent{
+    bullets ? (
+      <span class="mx-1.5 text-ink-muted/60" aria-hidden="true">·</span>
+    ) : (
+      <span> </span>
+    )
+  }<span class:list={["text-teal-dark", initialClass]}>C</span>omplex{
+    bullets ? (
+      <span class="mx-1.5 text-ink-muted/60" aria-hidden="true">·</span>
+    ) : (
+      <span> </span>
+    )
+  }<span class:list={["text-ink", initialClass]}>S</span>ystems
+</span>

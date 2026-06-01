@@ -2,8 +2,12 @@
 /**
  * Header — site-wide navigation.
  * Sticks to the top, uses a hairline rule under the bar, and underlines
- * the current section.
+ * the current section. The left-hand brand is a larger MAGICS wordmark
+ * with a small color-coded full-name tagline shown on `lg+` screens so
+ * the connection between the acronym and the expansion is always visible.
  */
+import LabName from "./LabName.astro";
+
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const navLinks: Array<{ href: string; label: string }> = [
@@ -24,21 +28,36 @@ function isActive(href: string): boolean {
   class="sticky top-0 z-30 bg-cream/85 backdrop-blur supports-[backdrop-filter]:bg-cream/70 border-b hairline"
 >
   <div
-    class="max-w-page mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6"
+    class="max-w-page mx-auto px-5 sm:px-8 py-3 sm:py-4 flex items-center justify-between gap-6"
   >
     <a
       href="/"
-      class="group inline-flex items-baseline gap-2 select-none"
-      aria-label="MAGICS Lab — home"
+      class="group select-none"
+      aria-label="MAGICS Lab — Multi-Agent Intelligent Complex Systems — home"
     >
-      <span
-        class="font-display text-xl sm:text-2xl font-medium tracking-tight"
-      >
-        <span class="text-ember">M</span><span class="text-gold">A</span
-        ><span class="text-ink">G</span><span class="text-teal">I</span
-        ><span class="text-teal-dark">C</span><span class="text-ink">S</span>
+      <span class="flex items-baseline gap-2 sm:gap-3">
+        <span
+          class="font-display text-3xl sm:text-4xl md:text-[2.75rem] font-medium tracking-tight leading-none"
+        >
+          <span class="text-ember">M</span><span class="text-gold">A</span
+          ><span class="text-ink">G</span><span class="text-teal">I</span
+          ><span class="text-teal-dark">C</span><span class="text-ink">S</span>
+        </span>
+        <span
+          class="font-display text-lg sm:text-xl md:text-2xl text-ink-muted font-medium leading-none"
+        >
+          Lab
+        </span>
       </span>
-      <span class="hidden sm:inline text-ink-muted text-sm">Lab</span>
+      <!--
+        Color-coded full name shown on lg+ screens. Keeps the M-A-G-I-C-S →
+        Multi-Agent Intelligent Complex Systems mapping visible on every
+        page without crowding the mobile header.
+      -->
+      <LabName
+        class="hidden lg:block mt-1 text-[11px] tracking-[0.04em] text-ink-soft"
+        bullets
+      />
     </a>
 
     <nav aria-label="Primary">

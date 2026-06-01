@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import NetworkHero from "../components/NetworkHero.astro";
+import LabName from "../components/LabName.astro";
 import ResearchAreas from "../components/ResearchAreas.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import PaperCard from "../components/PaperCard.astro";
@@ -34,14 +35,30 @@ const news = (await getCollection("news", ({ data }) => !data.draft))
             <span class="text-gold">Systems</span>
           </span>
         </h1>
+
+        <!--
+          Color-coded full name as a bridge between the headline and the
+          MAGICS acronym used elsewhere on the page. The initial letters
+          line up with the colors of M-A-G-I-C-S in the wordmark.
+        -->
         <p
-          class="mt-7 text-ink-soft text-lg sm:text-xl max-w-2xl leading-relaxed"
+          class="mt-6 sm:mt-7 font-display text-xl sm:text-2xl lg:text-3xl text-ink-soft leading-snug"
         >
-          MAGICS Lab — <span class="font-medium text-ink"
-            >Multi-Agent Intelligent Complex Systems</span
-          > — takes a sociotechnical perspective on the design and governance of
-          complex engineering systems, bringing together technical design, models
-          of human behavior, and policy.
+          <span class="text-ink-muted text-base sm:text-lg align-middle mr-2"
+            >MAGICS =</span
+          >
+          <LabName boldInitials class="text-ink" />
+        </p>
+
+        <p
+          class="mt-5 sm:mt-6 text-ink-soft text-base sm:text-lg max-w-2xl leading-relaxed"
+        >
+          MAGICS Lab takes a sociotechnical perspective on the design and
+          governance of complex engineering systems. We model how agents
+          co-evolve and adapt — to each other and to their environment —
+          and how individual behavior and collective system-level dynamics
+          shape one another, bringing together technical design,
+          behavioral modeling, and policy.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
           <a
@@ -82,6 +99,14 @@ const news = (await getCollection("news", ({ data }) => !data.draft))
           governance of complex engineering systems, bringing together
           technical design, models of human behavior, and policy and
           regulation.
+        </p>
+        <p>
+          A throughline of our work is modeling the behavior of complex
+          systems through <em class="text-ink not-italic font-medium"
+            >co-evolutionary and adaptation models</em
+          > — how agents adapt to one another, and how their behavior and
+          interactions shape collective system-level dynamics, which in turn
+          reshape the agents themselves.
         </p>
         <p>
           Founded in 2019, the lab evolved from CENS Lab (Complex Evolving
