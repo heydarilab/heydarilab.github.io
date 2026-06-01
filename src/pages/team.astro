@@ -33,6 +33,8 @@ type Member = {
   kind: Kind;
   bio?: string;
   link?: string;
+  /** Optional extra affiliation lines (e.g. department, institute). */
+  affiliations?: string[];
 };
 
 const members: Member[] = [
@@ -40,8 +42,12 @@ const members: Member[] = [
   {
     slug: "babak-heydari",
     name: "Babak Heydari",
-    role: "Director · Associate Professor, Northeastern University",
+    role: "Director · Professor",
     kind: "director",
+    affiliations: [
+      "College of Engineering (MIE Department), Northeastern University",
+      "Core faculty, Network Science Institute",
+    ],
     bio: "Works on the design and governance of complex sociotechnical systems — from networked organizations to multi-agent AI — at the intersection of engineering, behavioral science, and policy.",
     link: "https://coe.northeastern.edu/people/heydari-babak/",
   },
@@ -51,6 +57,7 @@ const members: Member[] = [
     role: "PhD Student",
     kind: "phd",
     bio: "Complex networks, computational social science, intelligent sociotechnical systems, and process mining.",
+    link: "https://www.linkedin.com/in/neginmaddah/",
   },
   {
     slug: "sepehr-ilami",
@@ -67,6 +74,14 @@ const members: Member[] = [
     kind: "phd",
     bio: "Network science, game theory, agent-based modeling, fairness in AI platforms — and the strategic behavior of large language models.",
     link: "https://netsi.khoury.northeastern.edu/people/nunzio-lore/",
+  },
+  {
+    slug: "hongan-zhu",
+    name: "Hongan Zhu",
+    role: "PhD Student",
+    kind: "phd",
+    bio: "Multi-agent systems, AI governance, behavioral dynamics, network science, and public health.",
+    link: "https://www.linkedin.com/in/hongan-zhu/",
   },
 
   // ---- Past graduate students & postdocs ----
@@ -202,6 +217,24 @@ const initials = (name: string): string =>
     </p>
   </section>
 
+  {/* ============================ Banner ============================ */}
+  <section
+    class="max-w-page mx-auto px-5 sm:px-8 mt-10 sm:mt-12"
+    data-reveal
+  >
+    <figure class="rounded-2xl overflow-hidden ring-1 ring-rule/80 bg-cream-card">
+      <img
+        src="/lab/banner.jpg"
+        alt="MAGICS Lab moments — group photos in front of Northeastern University, in the lab, at conferences, and at graduation."
+        width="1800"
+        height="600"
+        class="w-full h-auto"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </section>
+
   {/* ============================ Director ============================ */}
   {
     director && (
@@ -228,6 +261,13 @@ const initials = (name: string): string =>
           </div>
           <div class="sm:col-span-8">
             <p class="font-display text-2xl text-ink mb-1">{director.role}</p>
+            {director.affiliations && director.affiliations.length > 0 && (
+              <ul class="text-ink-soft text-sm leading-relaxed mb-3 space-y-0.5">
+                {director.affiliations.map((line) => (
+                  <li>{line}</li>
+                ))}
+              </ul>
+            )}
             {director.bio && (
               <p class="text-ink-soft leading-relaxed mb-4">{director.bio}</p>
             )}
@@ -297,6 +337,36 @@ const initials = (name: string): string =>
       </section>
     )
   }
+
+  {/* ============================ Lab space ============================ */}
+  <section class="max-w-page mx-auto px-5 sm:px-8 mt-24" data-reveal>
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <figure class="lg:col-span-7 rounded-2xl overflow-hidden ring-1 ring-rule/80 bg-cream-card">
+        <img
+          src="/lab/lab-space.jpg"
+          alt="The MAGICS Lab space at Northeastern — open workstations along a window-lined corridor, a soft lounge area with armchairs and plants, and private offices behind glass walls."
+          width="1600"
+          height="1200"
+          class="w-full h-auto"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <div class="lg:col-span-5">
+        <p class="eyebrow mb-3">Where we work</p>
+        <h2 class="h-display text-3xl sm:text-4xl leading-tight mb-4">
+          Our home at <span class="text-ember">Northeastern</span>.
+        </h2>
+        <p class="text-ink-soft leading-relaxed">
+          The lab sits in Northeastern's Mechanical &amp; Industrial
+          Engineering department, with open workstations, breakout
+          spaces, and easy proximity to the Network Science Institute —
+          the kind of room that nudges the work toward conversation
+          across disciplines.
+        </p>
+      </div>
+    </div>
+  </section>
 
   {/* ================== Past graduate students & postdocs ================== */}
   {
