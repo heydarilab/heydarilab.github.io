@@ -5,7 +5,7 @@ authors:
   - Babak Heydari
 venue: "Reliability Engineering & System Safety"
 year: 2024
-order: 60
+order: 70
 schematicId: "decentralized-recovery"
 imageAlt: "Disrupted network on the left self-organizes into a re-formed, differently shaped network on the right via bottom-up reconfiguration."
 links:

@@ -1,13 +1,13 @@
 ---
 title: "Strategic Behavior of Large Language Models and the Role of Game Structure versus Contextual Framing"
 authors:
-  - Nunzio Lore
+  - Nunzio Lorè
   - Babak Heydari
 venue: "Nature Scientific Reports"
 year: 2024
-order: 40
-image: "../../assets/papers/llm-strategic-fig1.png"
-imageAlt: "Workflow combining contextual framings (e.g. team talk, environmental negotiations) and game structures (Prisoner's Dilemma, Snowdrift, Stag Hunt, Prisoner's Delight) fed into GPT-3.5, GPT-4, and LLaMa-2 for statistical and case-study analysis."
+order: 30
+image: "../../assets/papers/llm-strategic-fig1.jpg"
+imageAlt: "Three-panel summary: (1) study goal — what shapes LLM strategic behavior more, game structure or contextual framing; (2) experimental setup — four games × five framings × GPT-3.5, GPT-4, LLaMa-2 producing cooperate-or-defect choices; (3) key findings — GPT-3.5 is context-driven, GPT-4 is structure-centric and bimodal, LLaMa-2 balances both."
 links:
   - label: "Publisher"
     href: "https://www.nature.com/articles/s41598-024-69032-z"

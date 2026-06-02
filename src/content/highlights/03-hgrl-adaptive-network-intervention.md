@@ -5,7 +5,7 @@ authors:
   - Babak Heydari
 venue: "ASME Journal of Computing and Information Science in Engineering"
 year: 2025
-order: 30
+order: 50
 image: "../../assets/papers/hgrl-fig1.png"
 imageAlt: "Hierarchical Graph Reinforcement Learning system diagram: HGRL framework observes and intervenes in an evolving network of autonomous agents that update their types by imitation."
 links:

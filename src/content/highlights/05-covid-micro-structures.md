@@ -5,7 +5,7 @@ authors:
   - Babak Heydari
 venue: "Nature Computational Science"
 year: 2022
-order: 50
+order: 60
 schematicId: "covid-pipeline"
 imageAlt: "Pipeline schematic: household and contact micro-inputs feed a small-world contact network; a policy intervention removes weak ties; the resulting SEIR-style curve tracks cases over time."
 links:

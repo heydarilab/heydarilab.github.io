@@ -2,7 +2,7 @@
 title: "Core or Periphery: Examining Where to Allocate Heterogeneous Inventors and the Impact on Firms' Innovation"
 authors:
   - Babak Heydari
-  - Sourav Chattopadhyay
+  - Shinjinee Chattopadhyay
   - Soumyakant Padhee
   - Samina Karim
 venue: "Strategic Management Journal"

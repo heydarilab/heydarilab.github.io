@@ -5,7 +5,7 @@ authors:
   - Babak Heydari
 venue: "ASME Journal of Mechanical Design"
 year: 2025
-order: 10
+order: 40
 image: "../../assets/papers/vae-rl-fig1.png"
 imageAlt: "Variational autoencoder applied to network topology — original graph is encoded into a Gaussian latent space, then decoded into a reconstructed graph."
 links:
