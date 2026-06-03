@@ -53,13 +53,19 @@
           cy={cy}
           r={i % 3 === 0 ? 5 : 3.5}
           fill={
-            i % 4 === 0 ? "#E07B3F" : i % 4 === 1 ? "#3A8C8C" : i % 4 === 2 ? "#D4A02A" : "#1B2A3A"
+            i % 4 === 0
+              ? "#F08A4A"
+              : i % 4 === 1
+              ? "#4FA8A8"
+              : i % 4 === 2
+              ? "#E4B43A"
+              : "#F1E5CE"
           }
           opacity="0.85"
         />
       ))
     }
-    <g stroke="#1B2A3A" stroke-opacity="0.18" stroke-width="1" fill="none">
+    <g stroke="#F1E5CE" stroke-opacity="0.22" stroke-width="1" fill="none">
       <line x1="120" y1="110" x2="260" y2="180" />
       <line x1="260" y1="180" x2="420" y2="90" />
       <line x1="420" y1="90" x2="560" y2="220" />
@@ -99,9 +105,11 @@
     let height = 0;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    // Lab palette — sampled from the overview figure.
-    const NODE_COLORS = ["#E07B3F", "#3A8C8C", "#D4A02A", "#1B2A3A"];
-    const EDGE_COLOR = "rgba(27, 42, 58, 0.18)";
+    // Lab palette — tuned for the dark Inkwell theme. The original
+    // navy node is replaced with a warm cream so all four hues are
+    // legible against the deep-navy background.
+    const NODE_COLORS = ["#F08A4A", "#4FA8A8", "#E4B43A", "#F1E5CE"];
+    const EDGE_COLOR = "rgba(232, 221, 199, 0.22)";
 
     // Tuning knobs
     const NODE_COUNT = 64;

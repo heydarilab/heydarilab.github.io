@@ -60,7 +60,11 @@ const { data } = paper;
     </header>
 
     <figure
-      class="mt-10 sm:mt-12 rounded-xl overflow-hidden ring-1 ring-rule/80 bg-cream-card"
+      class:list={[
+        "mt-10 sm:mt-12 rounded-xl overflow-hidden ring-1 ring-rule/80",
+        // Light paper mat for real figures; dark card for schematics.
+        data.image ? "bg-paper" : "bg-cream-card",
+      ]}
       data-reveal
     >
       <div class="aspect-[16/9] flex items-center justify-center">

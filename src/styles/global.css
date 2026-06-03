@@ -8,8 +8,8 @@
    ----------------------------------------------------------------- */
 
 :root {
-  color-scheme: light;
-  --rule: 229 217 190; /* rgb-equivalent for hairline rules */
+  color-scheme: dark;
+  --rule: 58 80 107; /* rgb-equivalent for hairline rules (Inkwell theme) */
 }
 
 html {
@@ -24,8 +24,8 @@ body {
 }
 
 ::selection {
-  background: theme("colors.ember.soft");
-  color: theme("colors.ink.DEFAULT");
+  background: theme("colors.ember.DEFAULT");
+  color: theme("colors.cream.DEFAULT");
 }
 
 /* Editorial display headings */
@@ -37,7 +37,7 @@ body {
 
 /* Small uppercase "eyebrow" label above headings */
 .eyebrow {
-  @apply font-sans uppercase text-xs font-semibold tracking-eyebrow text-ember-dark;
+  @apply font-sans uppercase text-xs font-semibold tracking-eyebrow text-ember;
 }
 
 /* Thin hairline rule used throughout */
@@ -87,7 +87,7 @@ body {
 
 /* Editorial drop-cap for the first paragraph of long-form pages */
 .dropcap > p:first-of-type::first-letter {
-  @apply font-display text-ember-dark;
+  @apply font-display text-ember;
   font-size: 3.6rem;
   line-height: 0.9;
   float: left;
@@ -106,7 +106,7 @@ body {
   @apply font-display text-2xl mt-10 mb-3 text-ink;
 }
 .prose-editorial a {
-  @apply text-ember-dark underline decoration-ember/40 underline-offset-2 hover:decoration-ember;
+  @apply text-ember underline decoration-ember/40 underline-offset-2 hover:decoration-ember;
 }
 .prose-editorial ul {
   @apply list-disc pl-6 mb-5;

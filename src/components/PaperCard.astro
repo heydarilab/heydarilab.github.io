@@ -43,7 +43,13 @@ const {
   ]}
 >
   <div
-    class="relative aspect-[16/9] overflow-hidden bg-cream border-b hairline"
+    class:list={[
+      "relative aspect-[16/9] overflow-hidden border-b hairline",
+      // Paper figures sit on a light "paper" mat so academic figures
+      // read like figures on paper, not bright islands on the dark
+      // page. Inline schematics already supply their own background.
+      image ? "bg-paper" : "bg-cream",
+    ]}
   >
     {
       image ? (
