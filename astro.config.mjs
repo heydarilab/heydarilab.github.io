@@ -3,11 +3,12 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 
 // MAGICS Lab site configuration.
-// This is a GitHub Pages **user/org** site, so `site` is the bare domain
-// and `base` is "/". If you ever move to a project page, set
-// `base: "/repo-name/"` here and the rest of the site will follow.
+// Served at the custom domain `magicslab.org` (via GitHub Pages) — the
+// `site` value below is used by Astro for canonical URLs, sitemap
+// entries, and absolute Open Graph image URLs.
+// The custom domain itself is wired up by `public/CNAME`.
 export default defineConfig({
-  site: "https://heydarilab.github.io",
+  site: "https://magicslab.org",
   base: "/",
   trailingSlash: "ignore",
   integrations: [tailwind({ applyBaseStyles: false })],
